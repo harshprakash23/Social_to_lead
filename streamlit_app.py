@@ -105,9 +105,9 @@ def _render_workflow_panel() -> None:
     )
 
     cols = st.columns(3)
-    cols[0].metric("Name", lead.get("name", "Missing"))
-    cols[1].metric("Email", lead.get("email", "Missing"))
-    cols[2].metric("Platform", lead.get("platform", "Missing"))
+    cols[0].markdown(_field_card("Name", lead.get("name", "Missing")), unsafe_allow_html=True)
+    cols[1].markdown(_field_card("Email", lead.get("email", "Missing")), unsafe_allow_html=True)
+    cols[2].markdown(_field_card("Platform", lead.get("platform", "Missing")), unsafe_allow_html=True)
 
     if missing:
         st.warning(f"Waiting for: {', '.join(missing)}")
@@ -121,7 +121,7 @@ def _render_workflow_panel() -> None:
         ("Mock lead capture complete", state["lead_capture_done"]),
     ]
     for label, done in steps:
-        st.checkbox(label, value=done, disabled=True)
+        st.markdown(_step_row(label, done), unsafe_allow_html=True)
 
 
 def _render_rag_panel() -> None:
@@ -195,21 +195,59 @@ def _humanize_intent(intent: str) -> str:
     return labels.get(intent, intent)
 
 
+def _field_card(label: str, value: str) -> str:
+    status_class = "field-value" if value != "Missing" else "field-missing"
+    return (
+        "<div class='field-card'>"
+        f"<div class='field-label'>{label}</div>"
+        f"<div class='{status_class}'>{value}</div>"
+        "</div>"
+    )
+
+
+def _step_row(label: str, done: bool) -> str:
+    marker = "Done" if done else "Pending"
+    status_class = "step-done" if done else "step-pending"
+    return (
+        f"<div class='step-row {status_class}'>"
+        f"<span class='step-dot'></span>"
+        f"<span class='step-label'>{label}</span>"
+        f"<span class='step-status'>{marker}</span>"
+        "</div>"
+    )
+
+
 def _apply_styles() -> None:
     st.markdown(
         """
         <style>
         .stApp {
-            background: #f6f8fb;
-            color: #172033;
+            background: #0f172a;
+            color: #e5edf8;
+        }
+        [data-testid="stHeader"] {
+            background: rgba(15, 23, 42, 0);
+        }
+        [data-testid="stAppViewContainer"] {
+            background: radial-gradient(circle at 20% 0%, #1e3a5f 0, #0f172a 38%, #111827 100%);
+        }
+        [data-testid="stSidebar"] {
+            background: #111827;
+        }
+        .block-container {
+            padding-top: 2rem;
+            max-width: 1280px;
+        }
+        p, li, label, span, div {
+            color: #e5edf8;
         }
         .brand {
             width: fit-content;
             padding: 0.35rem 0.6rem;
-            border: 1px solid #bed0e8;
+            border: 1px solid #38bdf8;
             border-radius: 6px;
-            background: #eaf2ff;
-            color: #244f85;
+            background: rgba(14, 165, 233, 0.14);
+            color: #bae6fd;
             font-weight: 700;
             letter-spacing: 0;
         }
@@ -217,63 +255,147 @@ def _apply_styles() -> None:
             margin: 0.4rem 0 0.1rem;
             font-size: 2.2rem;
             letter-spacing: 0;
+            color: #f8fafc;
         }
-        h4 {
-            margin-top: 1rem;
+        h2, h3, h4 {
+            color: #f8fafc;
+        }
+        [data-testid="stCaptionContainer"] p {
+            color: #b6c3d6;
+        }
+        .stButton > button {
+            border-radius: 8px;
+            border: 1px solid #38bdf8;
+            background: #0ea5e9;
+            color: #031525;
+            font-weight: 800;
+        }
+        .stButton > button:hover {
+            border-color: #7dd3fc;
+            background: #38bdf8;
+            color: #031525;
         }
         .status-panel {
             padding: 1rem;
-            border: 1px solid #d9e2ef;
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #ffffff;
+            background: rgba(15, 23, 42, 0.82);
             margin-bottom: 0.8rem;
         }
         .metric-label {
-            color: #5d6b82;
+            color: #b6c3d6;
             font-size: 0.82rem;
             margin-bottom: 0.25rem;
         }
         .intent {
-            color: #123766;
+            color: #7dd3fc;
             font-weight: 800;
             font-size: 1.15rem;
         }
-        .kb-row {
-            border: 1px solid #d9e2ef;
+        .field-card {
+            border: 1px solid #334155;
             border-radius: 8px;
-            background: #ffffff;
+            background: rgba(15, 23, 42, 0.82);
+            padding: 0.75rem;
+            min-height: 82px;
+            margin-bottom: 0.75rem;
+        }
+        .field-label {
+            color: #93a4b8;
+            font-size: 0.78rem;
+            margin-bottom: 0.3rem;
+        }
+        .field-value {
+            color: #bbf7d0;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+        .field-missing {
+            color: #fcd34d;
+            font-weight: 800;
+        }
+        .step-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.82);
+            padding: 0.65rem 0.75rem;
+            margin: 0.45rem 0;
+        }
+        .step-dot {
+            width: 0.7rem;
+            height: 0.7rem;
+            border-radius: 50%;
+            display: inline-block;
+            flex: 0 0 auto;
+        }
+        .step-done .step-dot {
+            background: #22c55e;
+        }
+        .step-pending .step-dot {
+            background: #64748b;
+        }
+        .step-label {
+            color: #e5edf8;
+            font-weight: 700;
+            flex: 1;
+        }
+        .step-status {
+            color: #b6c3d6;
+            font-size: 0.82rem;
+        }
+        .kb-row {
+            border: 1px solid #334155;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.82);
             padding: 0.8rem;
             margin-bottom: 0.6rem;
             line-height: 1.42;
+            color: #e5edf8;
         }
         .kb-title {
-            color: #244f85;
+            color: #7dd3fc;
             font-weight: 800;
             margin-bottom: 0.25rem;
         }
-        div[data-testid="stMetricValue"] {
-            font-size: 1rem;
-            line-height: 1.25;
-        }
         div[data-testid="stChatMessage"] {
-            background: #ffffff;
-            border: 1px solid #d9e2ef;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #334155;
             border-radius: 8px;
-            color: #172033;
+            color: #e5edf8;
         }
         div[data-testid="stChatMessage"] p {
-            color: #172033;
+            color: #e5edf8;
             font-size: 1rem;
             line-height: 1.55;
         }
         div[data-testid="stChatMessage"] svg {
-            color: #172033;
+            color: #e5edf8;
+        }
+        div[data-testid="stAlert"] {
+            border-radius: 8px;
+            color: #0f172a;
         }
         div[data-testid="stChatInput"] textarea {
             color: #ffffff;
         }
         div[data-testid="stChatInput"] textarea::placeholder {
             color: #c7ceda;
+        }
+        [data-testid="stTextInput"] input {
+            background: #111827;
+            color: #e5edf8;
+            border: 1px solid #334155;
+        }
+        [data-testid="stExpander"] {
+            border: 1px solid #334155;
+            background: rgba(15, 23, 42, 0.65);
+            border-radius: 8px;
+        }
+        code {
+            color: #e5edf8;
         }
         </style>
         """,
