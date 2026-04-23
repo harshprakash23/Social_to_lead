@@ -65,9 +65,10 @@ def _render_demo_controls() -> None:
             _reset_conversation()
             st.rerun()
 
+    st.caption("For the cleanest recording, paste each message without the number at the beginning.")
     with st.expander("Suggested recording script", expanded=False):
         for index, message in enumerate(DEMO_MESSAGES, start=1):
-            st.code(f"{index}. {message}", language="text")
+            st.text_input(f"Message {index}", value=message, key=f"demo_message_{index}")
 
 
 def _render_chat() -> None:
@@ -253,6 +254,26 @@ def _apply_styles() -> None:
         div[data-testid="stMetricValue"] {
             font-size: 1rem;
             line-height: 1.25;
+        }
+        div[data-testid="stChatMessage"] {
+            background: #ffffff;
+            border: 1px solid #d9e2ef;
+            border-radius: 8px;
+            color: #172033;
+        }
+        div[data-testid="stChatMessage"] p {
+            color: #172033;
+            font-size: 1rem;
+            line-height: 1.55;
+        }
+        div[data-testid="stChatMessage"] svg {
+            color: #172033;
+        }
+        div[data-testid="stChatInput"] textarea {
+            color: #ffffff;
+        }
+        div[data-testid="stChatInput"] textarea::placeholder {
+            color: #c7ceda;
         }
         </style>
         """,
