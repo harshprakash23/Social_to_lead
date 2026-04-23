@@ -42,6 +42,38 @@ class AutoStreamAgentWorkflowTest(unittest.TestCase):
         self.assertIn("Lead captured successfully: Aisha Mehta, aisha@example.com, YouTube", output.getvalue())
         self.assertIn("captured your interest", final_response)
 
+    def test_memory_across_six_turns_and_no_premature_tool_call(self) -> None:
+        agent = AutoStreamAgent()
+        state = agent.initial_state()
+        output = io.StringIO()
+
+        turns = [
+            "Hello",
+            "What support does Pro include?",
+            "I am ready to sign up.",
+            "My name is Ravi Shah.",
+            "My email is ravi@example.com.",
+            "My creator platform is Instagram.",
+        ]
+
+        responses = []
+        with redirect_stdout(output):
+            for turn in turns[:-1]:
+                state, response = agent.chat(state, turn)
+                responses.append(response)
+                self.assertFalse(state["lead_capture_done"])
+                self.assertNotIn("Lead captured successfully", output.getvalue())
+
+            state, final_response = agent.chat(state, turns[-1])
+
+        self.assertIn("24/7 support is available only on the Pro plan", responses[1])
+        self.assertEqual(state["lead"]["name"], "Ravi Shah")
+        self.assertEqual(state["lead"]["email"], "ravi@example.com")
+        self.assertEqual(state["lead"]["platform"], "Instagram")
+        self.assertTrue(state["lead_capture_done"])
+        self.assertIn("Lead captured successfully: Ravi Shah, ravi@example.com, Instagram", output.getvalue())
+        self.assertIn("captured your interest", final_response)
+
 
 if __name__ == "__main__":
     unittest.main()

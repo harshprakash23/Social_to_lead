@@ -9,6 +9,16 @@ The agent can:
 - Retain conversation state across multiple turns with LangGraph.
 - Collect lead details safely and call `mock_lead_capture(name, email, platform)` only after name, email, and creator platform are all available.
 
+## Assignment Checklist
+
+- **Language:** Python 3.9+
+- **Framework:** LangGraph from the LangChain ecosystem
+- **LLM:** GPT-4o-mini through `langchain-openai`
+- **State management:** LangGraph `StateGraph` carries messages, intent, retrieved docs, lead fields, missing fields, and tool status across turns
+- **Local RAG source:** `knowledge_base/autostream_kb.json`
+- **Intent classes:** casual greeting, product/pricing inquiry, high-intent lead
+- **Lead capture gate:** `mock_lead_capture` runs only after name, email, and creator platform are collected
+
 ## Project Structure
 
 ```text
@@ -65,11 +75,13 @@ Try this sample conversation:
 
 ```text
 You: Hi, tell me about your pricing.
-Agent: ...
+Agent: Basic Plan costs $29/month... Pro Plan costs $79/month...
 You: That sounds good, I want to try the Pro plan for my YouTube channel.
-Agent: ...
-You: My name is Aisha Mehta and my email is aisha@example.com.
-Agent: ...
+Agent: I have your creator platform: YouTube. Please share your name, and email...
+You: My name is Aisha Mehta.
+Agent: I have your creator platform: YouTube, name: Aisha Mehta. Please share your email...
+You: My email is aisha@example.com.
+Agent: Thanks, Aisha Mehta. I captured your interest in AutoStream for YouTube...
 ```
 
 When all three lead fields are collected, the terminal prints:
