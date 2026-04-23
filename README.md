@@ -26,6 +26,7 @@ The agent can:
 - **Intent detection:** `AutoStreamAgent._classify_intent()` in `autostream_agent/agent.py`
 - **Tool execution:** `mock_lead_capture()` in `autostream_agent/tools.py`, called from `autostream_agent/agent.py`
 - **Runnable CLI:** `main.py`
+- **Streamlit frontend:** `streamlit_app.py`
 - **Webhook deployment adapter:** `webhook_app.py`
 - **Dependencies:** `requirements.txt`
 - **Verification tests:** `tests/test_agent_workflow.py`
@@ -45,6 +46,7 @@ The agent can:
 +-- tests/
 |   +-- test_agent_workflow.py
 +-- main.py
++-- streamlit_app.py
 +-- webhook_app.py
 +-- requirements.txt
 +-- README.md
@@ -75,6 +77,12 @@ set OPENAI_API_KEY=your_api_key_here
 
 ```bash
 python main.py
+```
+
+Start the Streamlit frontend for screen recording:
+
+```bash
+streamlit run streamlit_app.py
 ```
 
 Optional webhook server for deployment testing:
