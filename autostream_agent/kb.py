@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Union
 
 
 class AutoStreamKnowledgeBase:
     """Loads local AutoStream facts and returns relevant grounded snippets."""
 
-    def __init__(self, path: str | Path) -> None:
+    def __init__(self, path: Union[str, Path]) -> None:
         self.path = Path(path)
         self.data = self._load()
         self.documents = self._build_documents()

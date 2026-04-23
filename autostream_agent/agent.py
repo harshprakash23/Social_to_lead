@@ -72,7 +72,7 @@ GREETING_TERMS = ("hi", "hello", "hey", "good morning", "good afternoon", "good 
 class AutoStreamAgent:
     """Conversational workflow that identifies intent, retrieves knowledge, and captures leads."""
 
-    def __init__(self, kb_path: str | Path = "knowledge_base/autostream_kb.json") -> None:
+    def __init__(self, kb_path: str = "knowledge_base/autostream_kb.json") -> None:
         self.kb = AutoStreamKnowledgeBase(kb_path)
         self.llm = LLMClient()
         self.graph = self._build_graph()

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Any
+from typing import Any, Optional
 
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -25,7 +25,7 @@ class LLMClient:
                 self.enabled = False
                 self.chat = None
 
-    def classify_intent(self, user_message: str) -> str | None:
+    def classify_intent(self, user_message: str) -> Optional[str]:
         if not self.enabled or self.chat is None:
             return None
 
@@ -44,7 +44,7 @@ class LLMClient:
             return None
         return None
 
-    def answer_from_context(self, user_message: str, context: str) -> str | None:
+    def answer_from_context(self, user_message: str, context: str) -> Optional[str]:
         if not self.enabled or self.chat is None:
             return None
 
