@@ -26,6 +26,7 @@ The agent can:
 - **Intent detection:** `AutoStreamAgent._classify_intent()` in `autostream_agent/agent.py`
 - **Tool execution:** `mock_lead_capture()` in `autostream_agent/tools.py`, called from `autostream_agent/agent.py`
 - **Runnable CLI:** `main.py`
+- **Webhook deployment adapter:** `webhook_app.py`
 - **Dependencies:** `requirements.txt`
 - **Verification tests:** `tests/test_agent_workflow.py`
 
@@ -44,6 +45,7 @@ The agent can:
 +-- tests/
 |   +-- test_agent_workflow.py
 +-- main.py
++-- webhook_app.py
 +-- requirements.txt
 +-- README.md
 ```
@@ -73,6 +75,12 @@ set OPENAI_API_KEY=your_api_key_here
 
 ```bash
 python main.py
+```
+
+Optional webhook server for deployment testing:
+
+```bash
+uvicorn webhook_app:app --reload
 ```
 
 Run the smoke test:
@@ -106,4 +114,4 @@ This project uses **LangGraph** because the assignment requires a real agentic w
 
 ## WhatsApp Deployment With Webhooks
 
-To integrate this agent with WhatsApp, I would connect it to the WhatsApp Business Cloud API. A backend service such as FastAPI or Flask would expose a `/webhook/whatsapp` endpoint and verify Meta's webhook challenge during setup. When a WhatsApp user sends a message, Meta posts the event payload to this endpoint. The backend extracts the sender phone number and message text, loads or creates that user's LangGraph state from a database such as Redis or PostgreSQL, and passes the message into the AutoStream agent. The agent returns the next response and updates state with intent, retrieved context, and any collected lead fields. If the user becomes a high-intent lead and provides name, email, and platform, the backend runs `mock_lead_capture` or a real CRM API. Finally, the backend sends the agent's reply back to the user through the WhatsApp Cloud API `/messages` endpoint. Each phone number acts as a conversation/session key so memory persists across multiple turns.
+To integrate this agent with WhatsApp, I would connect it to the WhatsApp Business Cloud API. A backend service such as FastAPI or Flask would expose a `/webhook/whatsapp` endpoint and verify Meta's webhook challenge during setup. This repository includes an optional FastAPI adapter in `webhook_app.py` to demonstrate that shape. When a WhatsApp user sends a message, Meta posts the event payload to this endpoint. The backend extracts the sender phone number and message text, loads or creates that user's LangGraph state from a database such as Redis or PostgreSQL, and passes the message into the AutoStream agent. The agent returns the next response and updates state with intent, retrieved context, and any collected lead fields. If the user becomes a high-intent lead and provides name, email, and platform, the backend runs `mock_lead_capture` or a real CRM API. Finally, the backend sends the agent's reply back to the user through the WhatsApp Cloud API `/messages` endpoint. Each phone number acts as a conversation/session key so memory persists across multiple turns.

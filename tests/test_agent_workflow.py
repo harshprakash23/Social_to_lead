@@ -74,6 +74,38 @@ class AutoStreamAgentWorkflowTest(unittest.TestCase):
         self.assertIn("Lead captured successfully: Ravi Shah, ravi@example.com, Instagram", output.getvalue())
         self.assertIn("captured your interest", final_response)
 
+    def test_greeting_and_policy_rag_answers(self) -> None:
+        agent = AutoStreamAgent()
+        state = agent.initial_state()
+
+        state, greeting_response = agent.chat(state, "Hello")
+        self.assertEqual(state["intent"], "casual_greeting")
+        self.assertIn("AutoStream pricing", greeting_response)
+
+        state, refund_response = agent.chat(state, "What is your refund policy?")
+        self.assertEqual(state["intent"], "product_or_pricing_inquiry")
+        self.assertIn("No refunds after 7 days", refund_response)
+
+    def test_tool_is_not_called_twice_after_capture(self) -> None:
+        agent = AutoStreamAgent()
+        state = agent.initial_state()
+
+        turns = [
+            "I want to sign up for YouTube.",
+            "My name is Mira Rao.",
+            "My email is mira@example.com.",
+        ]
+
+        output = io.StringIO()
+        with redirect_stdout(output):
+            for turn in turns:
+                state, _ = agent.chat(state, turn)
+            state, repeat_response = agent.chat(state, "Thanks, I am ready.")
+
+        self.assertTrue(state["lead_capture_done"])
+        self.assertEqual(output.getvalue().count("Lead captured successfully"), 1)
+        self.assertIn("already captured", repeat_response)
+
 
 if __name__ == "__main__":
     unittest.main()
