@@ -68,7 +68,11 @@ def _render_demo_controls() -> None:
 def _render_chat() -> None:
     st.markdown("#### Conversation")
     if not st.session_state.chat_history:
-        st.info("Start with: Hi, tell me about your pricing.")
+        with st.chat_message("assistant"):
+            st.write(
+                "Hi, I am the AutoStream lead agent. Ask me about pricing, features, refunds, "
+                "or say you want to try the Pro plan when you are ready."
+            )
 
     for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
