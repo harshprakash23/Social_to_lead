@@ -43,6 +43,8 @@ The agent can:
 |   +-- tools.py
 +-- knowledge_base/
 |   +-- autostream_kb.json
++-- docs/
+|   +-- images/
 +-- tests/
 |   +-- test_agent_workflow.py
 +-- main.py
@@ -114,6 +116,48 @@ When all three lead fields are collected, the terminal prints:
 
 ```text
 Lead captured successfully: Aisha Mehta, aisha@example.com, YouTube
+```
+
+## Streamlit Demo Screenshots
+
+Add your screenshots in `docs/images/` before final submission.
+
+| Fresh landing screen | Final lead-capture state |
+| --- | --- |
+| Add screenshot here: `docs/images/streamlit-home.png` | Add screenshot here: `docs/images/streamlit-lead-captured.png` |
+
+## Screen Recording Checklist
+
+Use the Streamlit frontend for the required video recording:
+
+```bash
+streamlit run streamlit_app.py
+```
+
+Record these steps:
+
+1. Ask a pricing question:
+
+```text
+Hi, tell me about your pricing.
+```
+
+2. Show high-intent detection:
+
+```text
+That sounds good, I want to try the Pro plan for my YouTube channel.
+```
+
+3. Collect the user name:
+
+```text
+My name is Aisha Mehta.
+```
+
+4. Collect the email and show successful mock lead capture:
+
+```text
+My email is aisha@example.com.
 ```
 
 ## Architecture Explanation
