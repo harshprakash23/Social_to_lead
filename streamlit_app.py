@@ -65,12 +65,6 @@ def _render_demo_controls() -> None:
             _reset_conversation()
             st.rerun()
 
-    st.caption("For the cleanest recording, paste each message without the number at the beginning.")
-    with st.expander("Suggested recording script", expanded=False):
-        for index, message in enumerate(DEMO_MESSAGES, start=1):
-            st.text_input(f"Message {index}", value=message, key=f"demo_message_{index}")
-
-
 def _render_chat() -> None:
     st.markdown("#### Conversation")
     if not st.session_state.chat_history:
