@@ -120,11 +120,9 @@ Lead captured successfully: Aisha Mehta, aisha@example.com, YouTube
 
 ## Streamlit Demo Screenshots
 
-Add your screenshots in `docs/images/` before final submission.
-
 | Fresh landing screen | Final lead-capture state |
 | --- | --- |
-| Add screenshot here: `docs/images/streamlit-home.png` | Add screenshot here: `docs/images/streamlit-lead-captured.png` |
+| ![Fresh Streamlit landing screen](docs/images/streamlit-home.png) | ![Final lead capture state](docs/images/streamlit-lead-captured.png) |
 
 ## Screen Recording Checklist
 
