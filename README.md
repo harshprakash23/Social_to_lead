@@ -19,6 +19,16 @@ The agent can:
 - **Intent classes:** casual greeting, product/pricing inquiry, high-intent lead
 - **Lead capture gate:** `mock_lead_capture` runs only after name, email, and creator platform are collected
 
+## Deliverables Map
+
+- **Agent logic:** `autostream_agent/agent.py`
+- **RAG pipeline:** `autostream_agent/kb.py` with local data in `knowledge_base/autostream_kb.json`
+- **Intent detection:** `AutoStreamAgent._classify_intent()` in `autostream_agent/agent.py`
+- **Tool execution:** `mock_lead_capture()` in `autostream_agent/tools.py`, called from `autostream_agent/agent.py`
+- **Runnable CLI:** `main.py`
+- **Dependencies:** `requirements.txt`
+- **Verification tests:** `tests/test_agent_workflow.py`
+
 ## Project Structure
 
 ```text
